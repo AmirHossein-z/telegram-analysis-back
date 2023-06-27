@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-// use App\Models\User;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -43,41 +42,43 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
+            'phone' => [
+                'required',
+                'regex:/^(\+98|0)?9\d{9}$/'
+            ]
         ]);
 
         if ($validator->fails()) {
             $errors = $validator->errors();
             $emailError = $errors->first('email');
             $passwordError = $errors->first('password');
+            $phoneError = $errors->first('phone');
+
+            $message = [
+                strlen($emailError) > 0 ? ['email' => 'ایمیل معتبر نیست'] : null,
+                strlen($passwordError) > 0 ? ['password' => 'پسورد معتبر نیست'] : null,
+                strlen($phoneError) > 0 ? ['phone' => 'شماره تلفن معتبر نیست'] : null,
+                // 'email' => $emailError,
+                // 'password' => $passwordError
+                // 'phone' => $phoneError
+            ];
+
+            $message = array_values(array_filter($message));
 
             return response()->json([
                 'status' => 'error',
-                'message' => [
-                    // 'email' => $emailError,
-                    // 'password' => $passwordError
-                    'email' => 'ایمیل معتبر نیست',
-                    'password' => 'پسورد معتبر نیست',
-                ]
+                'message' => $message
             ], 400);
         }
 
-        // $email = $request->input('email');
-        // $password = Hash::make($request->input('password'));
-        // $date_created = date('Y-m-d H:i:s');
-        // $date_updated = date('Y-m-d H:i:s');
-        // DB::insert('INSERT INTO users(email,password,date_created,date_updated) VALUES (?,?,?,?)', [$email, $password, $date_created, $date_updated]);
 
         $email = $request->input('email');
         $password = Hash::make($request->input('password'));
+        $phone = $request->input('phone');
         $date_created = date('Y-m-d H:i:s');
         $date_updated = date('Y-m-d H:i:s');
-        $user = User::create([
-            'email' => $email,
-            'password' => $password,
-            'date_created' => $date_created,
-            'date_updated' => $date_updated
-        ]);
+        DB::insert('INSERT INTO users(email,password,created_at,updated_at,phone) VALUES (?,?,?,?,?)', [$email, $password, $date_created, $date_updated, $phone]);
 
         return response()->json(['status' => 'success', 'message' => 'با موفقیت ثبت نام کردید']);
     }
