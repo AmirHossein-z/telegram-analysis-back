@@ -35,7 +35,7 @@ class AuthController extends Controller
             return response()->json(['status' => 'error', 'message' => 'کاربری با این مشخصات در سامانه وجود ندارد'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return response()->json(['access_token' => $this->respondWithToken($token), 'user' => auth()->user()]);
     }
 
     public function register(Request $request)
@@ -76,9 +76,9 @@ class AuthController extends Controller
         $email = $request->input('email');
         $password = Hash::make($request->input('password'));
         $phone = $request->input('phone');
-        $date_created = date('Y-m-d H:i:s');
-        $date_updated = date('Y-m-d H:i:s');
-        DB::insert('INSERT INTO users(email,password,created_at,updated_at,phone) VALUES (?,?,?,?,?)', [$email, $password, $date_created, $date_updated, $phone]);
+        $dateCreated = date('Y-m-d H:i:s');
+        $dateUpdated = date('Y-m-d H:i:s');
+        DB::insert('INSERT INTO users(email,password,created_at,updated_at,phone) VALUES (?,?,?,?,?)', [$email, $password, $dateCreated, $dateUpdated, $phone]);
 
         return response()->json(['status' => 'success', 'message' => 'با موفقیت ثبت نام کردید']);
     }

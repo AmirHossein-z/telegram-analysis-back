@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^8.1",
+        "danog/madelineproto": "^8",
         "flipbox/lumen-generator": "^9.2",
         "illuminate/support": "^10.11",
         "laravel/lumen-framework": "^10.0",
@@ -38,6 +39,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "prefer-stable": true
 }

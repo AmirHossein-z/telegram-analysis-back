@@ -19,6 +19,7 @@ $router->post('/api/register', 'AuthController@register');
 $router->post('/api/login', 'AuthController@login');
 $router->get('/api/refresh', 'AuthController@refresh');
 $router->get('/api/dashboard/logout', 'AuthController@logout');
+$router->get('api/channels/{userId}', 'ChannelController@getByUserId');
 
 // $router->group(['middleware' => 'auth'], function () use ($router) {
 $router->get('/api/dashboard/profile', 'UserController@getUserInfo');
@@ -27,3 +28,5 @@ $router->get('/api/dashboard/profile', 'UserController@getUserInfo');
 // $router->post('/register', 'AuthController@register');
 // $router->post('/login', 'AuthController@login');
 // });
+
+$router->get('/', 'TelegramController@test');
