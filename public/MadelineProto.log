@@ -4758,3 +4758,57 @@ Session, Amirhossein_Zareian:        	Garbage collected 1 incoming messages in D
 Session, Amirhossein_Zareian:        	Garbage collected 1 outgoing messages in DC 5, 0 left
 Session, Amirhossein_Zareian:        	Garbage collected 1 incoming messages in DC 3, 0 left
 Session, Amirhossein_Zareian:        	Garbage collected 1 outgoing messages in DC 3, 0 left
+ReadLoop, Amirhossein_Zareian:       	Got nothing in the socket in DC -4.8, reconnecting...
+Connection, Amirhossein_Zareian:     	Reconnecting DC -4.8
+Connection, Amirhossein_Zareian:     	Disconnecting from DC -4.8
+Connection, Amirhossein_Zareian:     	Disconnected from DC -4.8
+DataCenter, Amirhossein_Zareian:     	Reconnecting to DC -4 (8) from existing
+DataCenterConnection, Amirhossein_Zareian: 	Trying shared connection via tcp://149.154.165.96:443 main DC -4, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream (8)
+Connection, Amirhossein_Zareian:     	Connecting to DC -4.8
+Connection, Amirhossein_Zareian:     	Connected to DC -4.8!
+DataCenter, Amirhossein_Zareian:     	OK!
+Session, Amirhossein_Zareian:        	Garbage collected 37 incoming messages in DC 4, 0 left
+Session, Amirhossein_Zareian:        	Garbage collected 43 outgoing messages in DC 4, 0 left
+ReadLoop, Amirhossein_Zareian:       	Got nothing in the socket in DC -2.7, reconnecting...
+Connection, Amirhossein_Zareian:     	Reconnecting DC -2.7
+Connection, Amirhossein_Zareian:     	Disconnecting from DC -2.7
+Connection, Amirhossein_Zareian:     	Disconnected from DC -2.7
+DataCenter, Amirhossein_Zareian:     	Reconnecting to DC -2 (7) from existing
+DataCenterConnection, Amirhossein_Zareian: 	Trying shared connection via tcp://149.154.167.222:443 main DC -2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream (7)
+Connection, Amirhossein_Zareian:     	Connecting to DC -2.7
+Connection, Amirhossein_Zareian:     	Connected to DC -2.7!
+DataCenter, Amirhossein_Zareian:     	OK!
+PingLoop, Amirhossein_Zareian:       	Ping DC 1.0
+Session, Amirhossein_Zareian:        	Garbage collected 0 outgoing messages in DC 1, 1 left
+ReadLoop, Amirhossein_Zareian:       	Got nothing in the socket in DC -2.8, reconnecting...
+Connection, Amirhossein_Zareian:     	Reconnecting DC -2.8
+Connection, Amirhossein_Zareian:     	Disconnecting from DC -2.8
+Connection, Amirhossein_Zareian:     	Disconnected from DC -2.8
+DataCenter, Amirhossein_Zareian:     	Reconnecting to DC -2 (8) from existing
+DataCenterConnection, Amirhossein_Zareian: 	Trying shared connection via tcp://149.154.167.222:443 main DC -2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream (8)
+Connection, Amirhossein_Zareian:     	Connecting to DC -2.8
+Connection, Amirhossein_Zareian:     	Connected to DC -2.8!
+DataCenter, Amirhossein_Zareian:     	OK!
+Session, Amirhossein_Zareian:        	Garbage collected 1 incoming messages in DC 1, 0 left
+Session, Amirhossein_Zareian:        	Garbage collected 1 outgoing messages in DC 1, 0 left
+ReadLoop, Amirhossein_Zareian:       	Got nothing in the socket in DC -2.0, reconnecting...
+Connection, Amirhossein_Zareian:     	Reconnecting DC -2.0
+Connection, Amirhossein_Zareian:     	Disconnecting from DC -2.0
+Connection, Amirhossein_Zareian:     	Disconnected from DC -2.0
+DataCenter, Amirhossein_Zareian:     	Reconnecting to DC -2 (0) from existing
+DataCenterConnection, Amirhossein_Zareian: 	Trying shared connection via tcp://149.154.167.222:443 main DC -2, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream (0)
+Connection, Amirhossein_Zareian:     	Connecting to DC -2.0
+Connection, Amirhossein_Zareian:     	Connected to DC -2.0!
+DataCenter, Amirhossein_Zareian:     	OK!
+ReadLoop, Amirhossein_Zareian:       	Got nothing in the socket in DC -4.7, reconnecting...
+Connection, Amirhossein_Zareian:     	Reconnecting DC -4.7
+Connection, Amirhossein_Zareian:     	Disconnecting from DC -4.7
+Connection, Amirhossein_Zareian:     	Disconnected from DC -4.7
+DataCenter, Amirhossein_Zareian:     	Reconnecting to DC -4 (7) from existing
+DataCenterConnection, Amirhossein_Zareian: 	Trying shared connection via tcp://149.154.165.96:443 main DC -4, via ipv4 using AbridgedStream => BufferedRawStream => DefaultStream (7)
+Connection, Amirhossein_Zareian:     	Connecting to DC -4.7
+Connection, Amirhossein_Zareian:     	Connected to DC -4.7!
+DataCenter, Amirhossein_Zareian:     	OK!
+Session, Amirhossein_Zareian:        	Garbage collected 6 outgoing messages in DC 4, 33 left
+Session, Amirhossein_Zareian:        	Garbage collected 35 incoming messages in DC 4, 0 left
+Session, Amirhossein_Zareian:        	Garbage collected 33 outgoing messages in DC 4, 0 left
