@@ -17,16 +17,21 @@
 // $router->get('/api/', 'UserController@index');
 $router->post('/api/register', 'AuthController@register');
 $router->post('/api/login', 'AuthController@login');
-$router->get('/api/refresh', 'AuthController@refresh');
-$router->get('/api/dashboard/logout', 'AuthController@logout');
-$router->get('api/channels/{userId}', 'ChannelController@getByUserId');
 
-// $router->group(['middleware' => 'auth'], function () use ($router) {
-$router->get('/api/dashboard/profile', 'UserController@getUserInfo');
-// });
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/api/dashboard/profile', 'UserController@getUserInfo');
+    $router->get('/api/refresh', 'AuthController@refresh');
+    $router->get('/api/dashboard/logout', 'AuthController@logout');
+    $router->get('api/channels/{userId}', 'ChannelController@getByUserId');
+    $router->post('/api/dashboard/add_api_info', 'UserController@addApiInfo');
+    $router->get('/api/dashboard/login_telegram', 'TelegramController@loginTelegram');
+    $router->post('/api/dashboard/otp_validation', 'TelegramController@otpValidation');
+    $router->get('/api/dashboard/get_all_channels', 'TelegramController@getAllUserChannelsHas');
+    $router->post('/api/dashboard/set_channel', 'TelegramController@setChannelInfo');
+});
 // $router->group(['middleware' => 'auth'], function () use ($router) {
 // $router->post('/register', 'AuthController@register');
 // $router->post('/login', 'AuthController@login');
 // });
 
-$router->get('/', 'TelegramController@test');
+// $router->get('/', 'TelegramController@test');
