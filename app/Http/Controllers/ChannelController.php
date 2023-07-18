@@ -15,10 +15,10 @@ class ChannelController extends Controller
 
 
         if (count($channels) > 0) {
-            return response()->json(['status' => true, 'values' => $channels]);
+            return response()->json(['status' => true, 'value' => $channels]);
 
         } else {
-            return response()->json(['status' => false, 'values' => []]);
+            return response()->json(['status' => false, 'value' => []]);
         }
     }
 

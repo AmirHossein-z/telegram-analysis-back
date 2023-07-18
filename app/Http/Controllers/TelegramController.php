@@ -14,7 +14,6 @@ class TelegramController extends Controller
 {
     //
 
-    public $madelineProto = "";
     public function __construct()
     {
 
@@ -66,8 +65,6 @@ class TelegramController extends Controller
 
         $authorization = $this->madelineProto->completePhoneLogin($request->input('otp'));
 
-        // Save the session information
-        // file_put_contents('madeline.madeline', serialize($this->madelineProto->API));
         // if ($authorization['_'] === 'account.password') {
         //     $authorization = $this->madelineProto->complete2falogin(Tools::readLine('Please enter your password (hint ' . $authorization['hint'] . '): '));
         // }
@@ -128,76 +125,124 @@ class TelegramController extends Controller
 
         $madelinePath = base_path('public/telegram.madeline');
         $madeline_proto = new API($madelinePath);
-        // $info = $madeline_proto->getFullInfo('-100' . $channelId);
+        $info = $madeline_proto->getFullInfo('-100' . $channelId);
 
-        // $name = $info['Chat']['title'];
-        // $channel_telegram_id = $info['Chat']['username'];
-        // $description = $info['full']['about'];
-        // $membersCount = $info['full']['participants_count'];
+        $name = $info['Chat']['title'];
+        $channel_telegram_id = isset($info['Chat']['username']) ? $info['Chat']['username'] : null;
+        $description = $info['full']['about'];
+        $membersCount = $info['full']['participants_count'];
 
-        // $dateCreated = date('Y-m-d H:i:s');
-        // $dateUpdated = date('Y-m-d H:i:s');
-        // DB::insert('INSERT INTO channels(name,description,channel_telegram_id,members_count,user_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?)', [
-        //     $name,
-        //     $description,
-        //     $channel_telegram_id,
-        //     $membersCount,
-        //     auth()->user()->id,
-        //     $dateCreated,
-        //     $dateUpdated
-        // ]);
-
-        /* get channel info and insert to database */
-
-
-        /* get posts and insert to database */
-        $messages = $madeline_proto->messages->getHistory([
-            'peer' => '-100' . $channelId,
-            'offset_id' => 0,
-            'offset_date' => 0,
-            'add_offset' => 0,
-            'limit' => 0,
-            'max_id' => 0,
-            'min_id' => 0
+        $dateCreated = date('Y-m-d H:i:s');
+        $dateUpdated = date('Y-m-d H:i:s');
+        DB::insert('INSERT INTO channels(name,description,channel_telegram_id,members_count,user_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?)', [
+            $name,
+            $description,
+            $channel_telegram_id,
+            $membersCount,
+            auth()->user()->id,
+            $dateCreated,
+            $dateUpdated
         ]);
 
-        $posts = [];
-        foreach ($messages['messages'] as $message) {
-            $post = [
-                'id' => $message['id'],
-                'views' => $message['views'],
-                'shares' => $message['forwards'],
-                'tags' => $message['entities'] ?? [],
-                'date_created' => $message['date'] ?? null,
-                'date_edited' => $message['edit_date'] ?? null
-            ];
-
-            // Handle different message types (text, photo, video, etc.)
-            if (isset($message['message'])) {
-                $post['content'] = $message['message'];
-                preg_match_all('/#\w+/', $message['message'], $matches);
-                // this regex searchs for tags and excludes #name in link url
-                if (isset($matches[0])) {
-                    $post['tags'] = $matches[0];
-                }
-            } elseif (isset($message['media'])) {
-                if ($message['media'] instanceof \danog\MadelineProto\TL\Types\MessageMediaDocument) {
-                    $post['file_url'] = $madeline_proto->downloadToBrowser($message['media']['document']);
-                } elseif ($message['media'] instanceof \danog\MadelineProto\TL\Types\MessageMediaPhoto) {
-                    $post['file_url'] = $madeline_proto->downloadToBrowser($message['media']['photo']);
-                }
-            }
-
-            $posts[] = $post;
-        }
-
+        $channelIdInserted = DB::getPdo()->lastInsertId();
+        /* get channel info and insert to database */
 
         /* get posts and insert to database */
-        return response()->json(['status' => true, 'value' => $posts]);
+        $offsetId = 0;
+        $limit = 100;
+        $posts = [];
+        $i = 0;
+        try {
+
+            while (true) {
+                $messages = $madeline_proto->messages->getHistory([
+                    'peer' => '-100' . $channelId,
+                    'offset_id' => $offsetId,
+                    'offset_date' => 0,
+                    'add_offset' => 0,
+                    'limit' => $limit,
+                    'max_id' => 0,
+                    'min_id' => 0
+                ]);
+
+                if (empty($messages['messages'])) {
+                    break;
+                }
+
+                $posts = [];
+                foreach ($messages['messages'] as $message) {
+                    $post = [
+                        'id' => $message['id'],
+                        'views' => isset($message['views']) ? $message['views'] : 0,
+                        'shares' => isset($message['forwards']) ? $message['forwards'] : 0,
+                        'date_created' => $message['date'] ?? null,
+                        'date_edited' => $message['edit_date'] ?? null
+                    ];
+
+                    if (isset($message['message'])) {
+                        $post['content'] = $message['message'];
+                        preg_match_all('/#\w+/', $message['message'], $matches);
+                        // this regex searchs for tags and excludes #name in link url
+                        if (isset($matches[0])) {
+                            $post['tags'] = $matches[0];
+                            // $post['tags'] = '"' . implode(',', $post['tags']) . '"';
+                            $post['tags'] = implode(',', $post['tags']);
+                        }
+                    } elseif (isset($message['media'])) {
+                        if ($message['media'] instanceof \danog\MadelineProto\TL\Types\MessageMediaDocument) {
+                            // $post['file_url'] = $madeline_proto->downloadToBrowser($message['media']['document']);
+                            $post['content'] = '';
+                        } elseif ($message['media'] instanceof \danog\MadelineProto\TL\Types\MessageMediaPhoto) {
+                            // $post['file_url'] = $madeline_proto->downloadToBrowser($message['media']['photo']);
+                            $post['content'] = '';
+                        }
+                    } else {
+                        $post['content'] = '';
+                    }
+
+                    // convert to date that mysql understands
+                    if (isset($post['date_created'])) {
+                        $post['date_created'] = date('Y-m-d H:i:s', $post['date_created']);
+                    }
+
+                    if (isset($post['date_edited'])) {
+                        $post['date_edited'] = date('Y-m-d H:i:s', $post['date_edited']);
+                    }
+
+
+                    $posts[] = [
+                        'details' => $post['content'],
+                        'view' => $post['views'],
+                        'share' => $post['shares'],
+                        'type' => 0,
+                        'tags' => $post['tags'] ?? '',
+                        'channel_id' => (int) $channelIdInserted,
+                        'created_at' => $post['date_created'],
+                        'updated_at' => $post['date_edited'],
+                    ];
+                    $offsetId = $message['id'];
+                }
+                try {
+                    DB::table('posts')->insert($posts);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json([$e, DB::getQueryLog()]);
+                }
+                $i++;
+                if ($i === 5) {
+                    break;
+                }
+            }
+        } catch (\Throwable $th) {
+            return response()->json($th);
+        }
+
+        return response()->json(['status' => true, 'value' => '']);
+
+        /* get posts and insert to database */
     }
 
-    private function getPosts()
-    {
+    // private function getPosts()
+    // {
 
-    }
+    // }
 }
