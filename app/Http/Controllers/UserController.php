@@ -20,29 +20,6 @@ class UserController extends Controller
         return response()->json(auth()->user());
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
     public function addApiInfo(Request $request)
     {
         $validator = validator::make($request->all(), [
@@ -73,10 +50,5 @@ class UserController extends Controller
         $t = DB::update('UPDATE users set api_id = ?,api_hash = ?,updated_at = ? WHERE id = ?', [$apiHash, $apiId, $dateUpdated, auth()->user()->id]);
 
         return response()->json(['status' => 'success', 'message' => 'اطلاعات با موفقیت ثبت شد!']);
-    }
-
-    public function test()
-    {
-        return 'test';
     }
 }
