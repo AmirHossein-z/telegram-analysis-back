@@ -14,7 +14,6 @@
 */
 
 // this routes works
-// $router->get('/api/', 'UserController@index');
 $router->post('/api/register', 'AuthController@register');
 $router->post('/api/login', 'AuthController@login');
 
@@ -29,9 +28,3 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/api/dashboard/get_all_channels', 'TelegramController@getAllUserChannelsHas');
     $router->post('/api/dashboard/set_channel', 'TelegramController@setChannelInfo');
 });
-// $router->group(['middleware' => 'auth'], function () use ($router) {
-// $router->post('/register', 'AuthController@register');
-// $router->post('/login', 'AuthController@login');
-// });
-
-// $router->get('/', 'TelegramController@test');

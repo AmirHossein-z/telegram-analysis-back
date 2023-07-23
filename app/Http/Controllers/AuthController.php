@@ -41,6 +41,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'phone' => [
@@ -51,17 +52,16 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors();
+            $nameError = $errors->first('name');
             $emailError = $errors->first('email');
             $passwordError = $errors->first('password');
             $phoneError = $errors->first('phone');
 
             $message = [
+                strlen($nameError) > 0 ? ['name' => 'نام شما معتبر نیست'] : null,
                 strlen($emailError) > 0 ? ['email' => 'ایمیل معتبر نیست'] : null,
                 strlen($passwordError) > 0 ? ['password' => 'پسورد معتبر نیست'] : null,
                 strlen($phoneError) > 0 ? ['phone' => 'شماره تلفن معتبر نیست'] : null,
-                // 'email' => $emailError,
-                // 'password' => $passwordError
-                // 'phone' => $phoneError
             ];
 
             $message = array_values(array_filter($message));
@@ -74,11 +74,12 @@ class AuthController extends Controller
 
 
         $email = $request->input('email');
+        $name = $request->input('name');
         $password = Hash::make($request->input('password'));
         $phone = $request->input('phone');
         $dateCreated = date('Y-m-d H:i:s');
         $dateUpdated = date('Y-m-d H:i:s');
-        DB::insert('INSERT INTO users(email,password,created_at,updated_at,phone) VALUES (?,?,?,?,?)', [$email, $password, $dateCreated, $dateUpdated, $phone]);
+        DB::insert('INSERT INTO users(name,email,password,created_at,updated_at,phone) VALUES (?,?,?,?,?,?)', [$name, $email, $password, $dateCreated, $dateUpdated, $phone]);
 
         return response()->json(['status' => 'success', 'message' => 'با موفقیت ثبت نام کردید']);
     }
