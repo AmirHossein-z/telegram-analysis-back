@@ -27,4 +27,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('/api/dashboard/otp_validation', 'TelegramController@otpValidation');
     $router->get('/api/dashboard/get_all_channels', 'TelegramController@getAllUserChannelsHas');
     $router->post('/api/dashboard/set_channel', 'TelegramController@setChannelInfo');
+    $router->get('/api/dashboard/channel/{channelId}', 'ChannelController@getChannel');
+    // how ??? below works
+    $router->get('/api/dashboard/channel/{channelId}/posts?page=?', 'ChannelController@getChannel');
 });

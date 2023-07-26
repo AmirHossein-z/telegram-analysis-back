@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class TelegramController extends Controller
 {
-    //
 
     public function __construct()
     {
@@ -29,7 +28,7 @@ class TelegramController extends Controller
             }
 
             $settings = new Settings();
-            $madelinePath = base_path('public/telegram.madeline');
+            $madelinePath = base_path('public/telegram_' . $userInfo->id . '.madeline');
             $settings->setAppInfo((new AppInfo())->setApiId((int) $userInfo->api_id)->setApiHash($userInfo->api_hash));
             $this->madelineProto = new API($madelinePath, $settings);
 
@@ -50,6 +49,8 @@ class TelegramController extends Controller
 
     public function otpValidation(Request $request)
     {
+        $userInfo = auth()->user();
+
         $validator = Validator::make($request->all(), [
             'otp' => 'required',
         ]);
@@ -70,7 +71,7 @@ class TelegramController extends Controller
             ], 400);
         }
 
-        $madelinePath = base_path('public/telegram.madeline');
+        $madelinePath = base_path('public/telegram_' . $userInfo->id . '.madeline');
         $this->madelineProto = new API($madelinePath);
 
         $authorization = $this->madelineProto->completePhoneLogin($request->input('otp'));
@@ -87,8 +88,9 @@ class TelegramController extends Controller
 
     public function getAllUserChannelsHas()
     {
+        $userInfo = auth()->user();
         // Load the session information from the file
-        $madelinePath = base_path('public/telegram.madeline');
+        $madelinePath = base_path('public/telegram_' . $userInfo->id . '.madeline');
 
         // Create a new MadelineProto instance using the session information
         $madeline_proto = new API($madelinePath);
@@ -116,11 +118,12 @@ class TelegramController extends Controller
     public function setChannelInfo(Request $request)
     {
 
+        $userInfo = auth()->user();
         try {
             /* get channel info and insert to database */
             $channelId = $request->input('channelId');
 
-            $madelinePath = base_path('public/telegram.madeline');
+            $madelinePath = base_path('public/telegram_' . $userInfo->id . '.madeline');
             $madeline_proto = new API($madelinePath);
             $info = $madeline_proto->getFullInfo('-100' . $channelId);
 
