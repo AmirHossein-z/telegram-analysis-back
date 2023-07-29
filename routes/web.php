@@ -30,4 +30,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/api/dashboard/channel/{channelId}', 'ChannelController@getChannel');
     // how ??? below works
     $router->get('/api/dashboard/channel/{channelId}/posts', 'PostController@getPosts');
+    $router->get('/api/dashboard/post/{postId}', 'PostController@getPost');
 });
