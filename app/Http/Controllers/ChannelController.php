@@ -8,17 +8,29 @@ use danog\MadelineProto\API;
 
 class ChannelController extends Controller
 {
-    public function getByUserId($userId)
+    public function getByUserId($userId, Request $request)
     {
-        // $channels = Channel::where('user_id', $userId)->get();
+        // $channels = DB::select('SELECT * FROM channels WHERE user_id = ?', [$userId]);
 
-        $channels = DB::select('SELECT * FROM channels WHERE user_id = ?', [$userId]);
+        // if (count($channels) > 0) {
+        //     return response()->json(['status' => true, 'value' => $channels]);
 
-        if (count($channels) > 0) {
-            return response()->json(['status' => true, 'value' => $channels]);
+        // } else {
+        //     return response()->json(['status' => false, 'value' => []]);
+        // }
+        try {
+            $page = $request->query('page', 1);
 
-        } else {
-            return response()->json(['status' => false, 'value' => []]);
+            $channels = DB::table('channels')->where('user_id', $userId)->paginate(10);
+
+            if (count($channels) > 0) {
+                return response()->json(['status' => true, 'value' => $channels]);
+
+            } else {
+                return response()->json(['status' => false, 'value' => []]);
+            }
+        } catch (\Throwable $e) {
+            return response()->json($e);
         }
     }
 
