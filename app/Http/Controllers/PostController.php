@@ -44,4 +44,28 @@ class PostController extends Controller
             return response()->json(['status' => false, 'value' => []]);
         }
     }
+
+    public function top10($channelId)
+    {
+        try {
+            $top10Views = DB::select('SELECT * FROM posts WHERE channel_id = ? ORDER BY view DESC LIMIT 10', [$channelId]);
+            $top10Shares = DB::select('SELECT * FROM posts WHERE channel_id = ? ORDER BY share DESC LIMIT 10', [$channelId]);
+            return response()->json(['status' => true, 'value' => ['view' => $top10Views, 'share' => $top10Shares]]);
+        } catch (\Throwable $e) {
+            return response()->json($e);
+        }
+
+    }
+
+    public function getPostsStat($channelId)
+    {
+        try {
+            $views = DB::select('SELECT id, view, created_at FROM posts WHERE channel_id = ? ORDER BY created_at ASC', [$channelId]);
+            $shares = DB::select('SELECT id, share, created_at FROM posts WHERE channel_id = ? ORDER BY created_at ASC', [$channelId]);
+
+            return response()->json(['status' => true, 'value' => ['view' => $views, 'share' => $shares]]);
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'value' => $e]);
+        }
+    }
 }
