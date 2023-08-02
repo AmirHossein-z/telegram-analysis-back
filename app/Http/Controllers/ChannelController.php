@@ -73,6 +73,7 @@ class ChannelController extends Controller
         try {
             $page = $request->query('page', 1);
             $filter = $request->query('filter', null);
+            $tagName = $request->query('tagName', null);
             $limit = 10;
 
             $query = DB::table('channels')->where('user_id', $userId);
@@ -87,10 +88,14 @@ class ChannelController extends Controller
                 $query->orderBy('share');
             }
 
+            if (!empty($tagName)) {
+                $query->where('tags', 'like', '%' . '#' . $tagName . '%');
+            }
+
             $channels = $query->paginate($limit, ['*'], 'page', $page);
 
             if ($channels->count() > 0) {
-                return response()->json(['status' => true, 'value' => $channels, 'filter' => $filter]);
+                return response()->json(['status' => true, 'value' => $channels]);
             } else {
                 return response()->json(['status' => false, 'value' => []]);
             }
@@ -123,6 +128,19 @@ class ChannelController extends Controller
 
         if (count($channelInfo) > 0) {
             return response()->json(['status' => true, 'value' => $channelInfo]);
+
+        } else {
+            return response()->json(['status' => false, 'value' => []]);
+        }
+    }
+
+    public function getAllTags($userId)
+    {
+
+        $tags = DB::select('SELECT id AS channelId,tags FROM channels WHERE user_id = ?', [$userId]);
+
+        if (count($tags) > 0) {
+            return response()->json(['status' => true, 'value' => $tags]);
 
         } else {
             return response()->json(['status' => false, 'value' => []]);

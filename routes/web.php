@@ -32,4 +32,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('/api/dashboard/post/{postId}', 'PostController@getPost');
     $router->get('/api/dashboard/top10/{channelId}', 'PostController@top10');
     $router->get('/api/dashboard/post/stat/{channelId}', 'PostController@getPostsStat');
+    $router->get('/api/dashboard/tags/all/{userId}', 'ChannelController@getAllTags');
 });
