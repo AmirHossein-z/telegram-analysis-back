@@ -276,7 +276,7 @@ class TelegramController extends Controller
             // update channel table with new views and shares value
             DB::update("UPDATE channels SET view = ?, share = ?,tags=? WHERE id = ?", [$allViews, $AllShares, $mostUsedTagsString, $channelIdInserted]);
         } catch (\Throwable $e) {
-            return response()->json([$e]);
+            return response()->json([$e->getMessage()]);
         }
 
         return response()->json(['status' => true, 'value' => '']);

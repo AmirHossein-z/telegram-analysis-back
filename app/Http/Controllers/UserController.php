@@ -29,12 +29,12 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             $errors = $validator->errors();
-            $emailError = $errors->first('apiId');
-            $passwordError = $errors->first('apiHash');
+            $apiIdError = $errors->first('apiId');
+            $apiHashError = $errors->first('apiHash');
 
             $message = [
-                strlen($emailError) > 0 ? ['apiId' => 'api_id معتبر نیست'] : null,
-                strlen($passwordError) > 0 ? ['apiHash' => 'api_hash معتبر نیست'] : null,
+                strlen($apiIdError) > 0 ? ['apiId' => 'api_id معتبر نیست'] : null,
+                strlen($apiHashError) > 0 ? ['apiHash' => 'api_hash معتبر نیست'] : null,
             ];
 
             $message = array_values(array_filter($message));
@@ -47,7 +47,7 @@ class UserController extends Controller
         $apiId = $request->input('apiId');
         $apiHash = $request->input('apiHash');
         $dateUpdated = date('Y-m-d H:i:s');
-        $t = DB::update('UPDATE users set api_id = ?,api_hash = ?,updated_at = ? WHERE id = ?', [$apiHash, $apiId, $dateUpdated, auth()->user()->id]);
+        $t = DB::update('UPDATE users set api_id = ?,api_hash = ?,updated_at = ? WHERE id = ?', [$apiId, $apiHash, $dateUpdated, auth()->user()->id]);
 
         return response()->json(['status' => 'success', 'message' => 'اطلاعات با موفقیت ثبت شد!']);
     }
