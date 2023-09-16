@@ -76,13 +76,6 @@ class TelegramController extends Controller
 
         $authorization = $this->madelineProto->completePhoneLogin($request->input('otp'));
 
-        // if ($authorization['_'] === 'account.password') {
-        //     $authorization = $this->madelineProto->complete2falogin(Tools::readLine('Please enter your password (hint ' . $authorization['hint'] . '): '));
-        // }
-        // if ($authorization['_'] === 'account.needSignup') {
-        //     $authorization = $this->madelineProto->completeSignup(Tools::readLine('Please enter your first name: '), readline('Please enter your last name (can be empty): '));
-        // }
-
         return response()->json(['status' => true, 'value' => '']);
     }
 
@@ -267,10 +260,6 @@ class TelegramController extends Controller
                 } catch (\Illuminate\Database\QueryException $e) {
                     return response()->json([$e, DB::getQueryLog()]);
                 }
-                // $i++;
-                // if ($i === 5) {
-                //     break;
-                // }
             }
 
             // update channel table with new views and shares value
